@@ -2,6 +2,8 @@ package com.will.weiyue.module;
 
 import android.content.Context;
 
+import com.will.weiyue.MyApp;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -20,6 +22,11 @@ public class ApplicationModule {
 
     @Provides
     MyApp provideApplication() {
-        return mContext.
+        return (MyApp) mContext.getApplicationContext();
+    }
+
+    @Provides
+    Context kprovideContext() {
+        return mContext;
     }
 }

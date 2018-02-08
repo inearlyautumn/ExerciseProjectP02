@@ -15,6 +15,7 @@ import com.will.weiyue.MyApp;
 import com.will.weiyue.R;
 import com.will.weiyue.ui.inter.IBase;
 import com.will.weiyue.ui.utils.StatusBarUtil;
+import com.will.weiyue.ui.widget.MultiStateView;
 import com.will.weiyue.ui.widget.SimpleMultiStateView;
 import com.will.weiyue.utils.ToastUtil;
 
@@ -60,7 +61,20 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
     }
 
     private void initStateView() {
-        m
+        if (mSimpleMultiStateView != null) {
+            mSimpleMultiStateView.setEmptyResource(R.layout.view_empty)
+                    .setRetryResource(R.layout.view_retry)
+                    .setLoadingResource(R.layout.view_loading)
+                    .setNoNetResource(R.layout.view_nonet)
+                    .build()
+                    .setOnReLoadListener(new MultiStateView.OnReLoadListener() {
+                        @Override
+                        public void onReload() {
+                            onRetry();
+                        }
+                    });
+
+        }
     }
 
     private void attachView() {
