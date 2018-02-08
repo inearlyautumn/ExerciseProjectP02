@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import com.will.weiyue.component.ApplicationComponent;
 import com.will.weiyue.ui.base.BaseActivity;
 import com.will.weiyue.ui.base.SupportFragment;
+import com.will.weiyue.ui.news.NewsFragment;
 import com.will.weiyue.ui.utils.StatusBarUtil;
 import com.will.weiyue.widget.BottomBar;
 
@@ -35,6 +36,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public void bindView(View view, Bundle saveInstanceState) {
         StatusBarUtil.setTranslucentForImageViewInFragment(MainActivity.this, 0, null);
+        if (saveInstanceState == null) {
+            mFragments[0] = NewsFragment.newInstance();
+        }
     }
 
     @Override
