@@ -30,4 +30,9 @@ public class ContextUtils {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getHeight();
     }
+
+    public static int dip2px(Context context, float dip) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dip * scale + 0.5f);
+    }
 }

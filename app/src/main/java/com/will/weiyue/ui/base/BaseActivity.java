@@ -55,9 +55,14 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
         setContentView(mRootView);
         initInjector(MyApp.getInstance().getmApplicationComponent());
         attachView();
-        BindView(mRootView, savedInstanceState);
+        bindView(mRootView, savedInstanceState);
         initStateView();
 
+    }
+
+    @Override
+    public View getView() {
+        return mRootView;
     }
 
     private void initStateView() {

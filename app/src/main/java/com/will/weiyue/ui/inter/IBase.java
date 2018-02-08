@@ -21,7 +21,7 @@ public interface IBase {
 
     void initInjector(ApplicationComponent applicationComponent);
 
-    void BindView(View view, Bundle saveInstanceState);
+    void bindView(View view, Bundle saveInstanceState);
 
     void initData();
 }

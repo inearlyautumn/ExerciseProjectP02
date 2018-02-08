@@ -8,6 +8,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.will.weiyue.MainActivity;
+import com.will.weiyue.R;
 import com.will.weiyue.ui.base.BaseActivity;
 import com.will.weiyue.ui.base.BaseContract;
 
@@ -17,6 +19,12 @@ import com.will.weiyue.ui.base.BaseContract;
  */
 
 public class StatusBarUtil {
+    private static final int DEFAULT_STATUS_BAR_ALPHA = 112;
+    private static int FAKE_STATUS_BAR_VIEW_ID = R.id.statusbarutil_fake_status_bar_view;
+    private static final int FAKE_TRANSLUCENT_VIEW_ID = R.id.statusbarutil_translucent_view;
+    private static final int TAG_KEY_HAVE_SET_OFFSET = -123;
+
+
     public static void setColorForSwipBack(Activity activity, int color, @IntRange(from = 0, to = 255) int statusBarAlpha) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
@@ -66,4 +74,27 @@ public class StatusBarUtil {
     }
 
 
+    /**
+     * 为 fragment 头部是 ImageView 的设置状态栏透明
+     *
+     * @param activity       fragment对应的activity
+     * @param stausBarAlpha  状态栏透明度
+     * @param needOffsetView 需要向下偏移的 View
+     */
+    public static void setTranslucentForImageViewInFragment(Activity activity, int statusBarAlpha, View needOffsetView) {
+        setTranslucentForImageViewInFragment(activity, statusBarAlpha, needOffsetView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            clearPreviousSetting(activity);
+        }
+    }
+
+    private static void clearPreviousSetting(Activity activity) {
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        View fakeStatusBarView = decorView.findViewById(FAKE_STATUS_BAR_VIEW_ID);
+        if (fakeStatusBarView != null) {
+            decorView.removeView(fakeStatusBarView);
+            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setPadding(0, 0, 0, 0);
+        }
+    }
 }

@@ -52,8 +52,8 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     @Override
-    public void BindView(View view, Bundle saveInstanceState) {
-        //StatusBarUtil.setTranslucentForImageView(this,0,flAd);
+    public void bindView(View view, Bundle savedInstanceState) {
+        //StatusBarUtil.setTranslucentForImageView(this, 0, flAd);
         final GifDrawable gifDrawable = (GifDrawable) gifImageView.getDrawable();
         gifDrawable.setLoopCount(1);
         gifImageView.postDelayed(new Runnable() {
@@ -93,12 +93,22 @@ public class WelcomeActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.dispose();
+        }
+        super.onDestroy();
+    }
+
     private void toMain() {
         if (mCompositeDisposable != null) {
             mCompositeDisposable.dispose();
         }
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private Observable<Integer> countDown(int time) {
@@ -117,6 +127,7 @@ public class WelcomeActivity extends BaseActivity {
                 .take(countTime + 1);
     }
 
+
     @OnClick(R.id.fl_ad)
     public void onViewClicked() {
         toMain();
@@ -128,27 +139,8 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     @Override
-    public void onSwipeBackLayoutSlide(float slideOffset) {
-
-    }
-
-    @Override
-    public void onSwipeBackLayoutCancel() {
-
-    }
-
-    @Override
-    public void onSwipeBackLayoutExecuted() {
-
-    }
-
-    @Override
-    public View getView() {
-        return null;
-    }
-
-    @Override
     public void onRetry() {
 
     }
+
 }
