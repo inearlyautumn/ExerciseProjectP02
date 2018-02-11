@@ -1,6 +1,7 @@
 package com.will.weiyue.widget;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -18,7 +19,7 @@ import com.will.weiyue.utils.ContextUtils;
  * date: 2018/2/8
  */
 
-class BottomBarTab extends LinearLayout {
+public class BottomBarTab extends LinearLayout {
 
     private Context mContext;
     private int icon;
@@ -26,7 +27,7 @@ class BottomBarTab extends LinearLayout {
     private TextView mTextView;
     private int mTabPosition = -1;
 
-    public BottomBarTab(Context context, int icon, String title) {
+    public BottomBarTab(Context context, @DrawableRes int icon, String title) {
         this(context, null, icon, title);
     }
 

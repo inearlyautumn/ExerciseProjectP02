@@ -3,6 +3,8 @@ package com.will.weiyue.module;
 import com.google.gson.Gson;
 import com.will.weiyue.MyApp;
 import com.will.weiyue.net.ApiConstants;
+import com.will.weiyue.net.JanDanApi;
+import com.will.weiyue.net.JanDanApiService;
 import com.will.weiyue.net.NewsApi;
 import com.will.weiyue.net.NewsApiService;
 import com.will.weiyue.net.RetrofitConfig;
@@ -53,5 +55,19 @@ public class HttpModule {
                 .baseUrl(ApiConstants.sIFengApi)
                 .build()
                 .create(NewsApiService.class));
+    }
+
+    @Provides
+    JanDanApi provideJanDanApis(OkHttpClient.Builder builder) {
+
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(builder.build());
+
+        return JanDanApi.getInstance(retrofitBuilder
+                .baseUrl(ApiConstants.sJanDanApi)
+                .build()
+                .create(JanDanApiService.class));
     }
 }

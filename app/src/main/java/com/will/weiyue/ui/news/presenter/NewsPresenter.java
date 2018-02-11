@@ -16,12 +16,19 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * author: liweixing
  * date: 2018/2/8
  */
 
 public class NewsPresenter extends BasePresenter<NewsContract.View> implements NewsContract.Presenter {
+
+    @Inject
+    public NewsPresenter() {
+    }
+
     @Override
     public void getChannel() {
         List<Channel> channelList;

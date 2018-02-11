@@ -10,6 +10,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.will.weiyue.R;
 import com.will.weiyue.bean.Channel;
 import com.will.weiyue.component.ApplicationComponent;
+import com.will.weiyue.component.DaggerHttpComponent;
 import com.will.weiyue.component.HttpComponent;
 import com.will.weiyue.ui.base.BaseFragment;
 import com.will.weiyue.ui.news.contract.NewsContract;
@@ -55,7 +56,10 @@ public class NewsFragment extends BaseFragment<NewsPresenter> implements NewsCon
 
     @Override
     public void initInjector(ApplicationComponent applicationComponent) {
-
+        DaggerHttpComponent.builder()
+                .applicationComponent(applicationComponent)
+                .build()
+                .inject(this);
     }
 
     @Override

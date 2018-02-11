@@ -53,7 +53,7 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
         super.onCreate(savedInstanceState);
         mRootView = createView(null, null, savedInstanceState);
         setContentView(mRootView);
-        initInjector(MyApp.getInstance().getmApplicationComponent());
+        initInjector(MyApp.getInstance().getApplicationComponent());
         attachView();
         bindView(mRootView, savedInstanceState);
         initStateView();
@@ -131,7 +131,7 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
 /*    *//**
      * 设置状态栏颜色
      *
-     * @param color
+     * @param
      *//*
     protected void setStatusBarColor(@ColorInt int color) {
         setStatusBarColor(color, StatusBarUtil.DEFAULT_STATUS_BAR_ALPHA);
