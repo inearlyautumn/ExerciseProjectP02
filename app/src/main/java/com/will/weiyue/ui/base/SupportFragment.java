@@ -20,6 +20,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  */
 
 public class SupportFragment extends RxFragment implements ISupportFragment {
+
     final SupportFragmentDelegate mDelegate = new SupportFragmentDelegate(this);
     protected FragmentActivity mActivity;
 
@@ -83,26 +84,26 @@ public class SupportFragment extends RxFragment implements ISupportFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         mDelegate.onDestroyView();
+        super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mDelegate.onDestroy();
+        super.onDestroy();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
         mDelegate.onHiddenChanged(hidden);
+        super.onHiddenChanged(hidden);
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
         mDelegate.setUserVisibleHint(isVisibleToUser);
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
     /**

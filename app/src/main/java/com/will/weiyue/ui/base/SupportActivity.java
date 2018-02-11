@@ -78,7 +78,8 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
 
     /**
      * 获取设置的全局动画 copy
-     * @return
+     *
+     * @return FragmentAnimator
      */
     @Override
     public FragmentAnimator getFragmentAnimator() {
@@ -88,6 +89,7 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
     /**
      * set all fragments animation
      * 设置Fragment内的全局动画
+     *
      * @param fragmentAnimator
      */
     @Override
@@ -95,10 +97,12 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
         mDelegate.setFragmentAnimator(fragmentAnimator);
     }
 
-    /**set all fragment animation
+    /**
+     * set all fragment animation
      * 构建Fragment 转场动画
      * 如果是在Activity内实现，则构建的是Activity内所有的Fragment的转场动画，
      * 如果是在Fragment内实现，则构建的是该Fragment的转场动画，此时优先级 >Activity的onCreateFragmentAnimator()
+     *
      * @return FragmentAnimator对象
      */
     @Override
@@ -117,6 +121,7 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
 
     /**
      * 获取栈内的Fragment对象
+     *
      * @param fragmentClass
      * @param <T>
      * @return

@@ -18,7 +18,7 @@ public interface NewsContract {
     interface Presenter extends BaseContract.BasePresenter<View> {
         /**
          * 初始化频道
-         * */
+         */
         void getChannel();
     }
 }

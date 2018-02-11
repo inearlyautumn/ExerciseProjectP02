@@ -16,11 +16,11 @@ import com.will.weiyue.widget.BottomBar;
 import com.will.weiyue.widget.BottomBarTab;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+
     @BindView(R.id.bottomBar)
     BottomBar bottomBar;
     @BindView(R.id.contentContainer)
@@ -68,7 +68,6 @@ public class MainActivity extends BaseActivity {
                 .addItem(new BottomBarTab(this, R.drawable.ic_video, "视频"))
                 .addItem(new BottomBarTab(this, R.drawable.ic_jiandan, "煎蛋"))
                 .addItem(new BottomBarTab(this, R.drawable.ic_my, "我的"));
-
         bottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {
@@ -109,10 +108,5 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

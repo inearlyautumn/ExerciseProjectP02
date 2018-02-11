@@ -40,10 +40,16 @@ public class NewsFragment extends BaseFragment<NewsPresenter> implements NewsCon
     CustomViewPager viewpager;
     Unbinder unbinder;
 
+//    private ChannelPagerAdapter mChannelPagerAdapter;
+
+    private List<Channel> mSelectedDatas;
+    private List<Channel> mUnSelectedDatas;
+
+    private int selectedIndex;
+    private String selectedChannel;
+
     public static NewsFragment newInstance() {
-
         Bundle args = new Bundle();
-
         NewsFragment fragment = new NewsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -63,11 +69,6 @@ public class NewsFragment extends BaseFragment<NewsPresenter> implements NewsCon
     }
 
     @Override
-    public void loadData(List<Channel> channels, List<Channel> otherChannels) {
-
-    }
-
-    @Override
     public void bindView(View view, Bundle saveInstanceState) {
 
     }
@@ -78,12 +79,10 @@ public class NewsFragment extends BaseFragment<NewsPresenter> implements NewsCon
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
+    public void loadData(List<Channel> channels, List<Channel> otherChannels) {
+
     }
+
 
     @Override
     public void onDestroyView() {

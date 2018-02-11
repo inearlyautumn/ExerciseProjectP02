@@ -2,16 +2,22 @@ package com.will.weiyue.ui.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.IntRange;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import com.will.weiyue.MainActivity;
 import com.will.weiyue.R;
 import com.will.weiyue.ui.base.BaseActivity;
 import com.will.weiyue.ui.base.BaseContract;
+
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 /**
  * author: liweixing
@@ -26,13 +32,13 @@ public class StatusBarUtil {
 
 
     public static void setColorForSwipBack(Activity activity, int color, @IntRange(from = 0, to = 255) int statusBarAlpha) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (SDK_INT >= Build.VERSION_CODES.KITKAT) {
             ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
             View rootView = contentView.getChildAt(0);
             int statusBarHeight = getStatusBarHeight(activity);
             if (rootView != null && rootView instanceof CoordinatorLayout) {
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) rootView;
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                if (SDK_INT < LOLLIPOP) {
                     coordinatorLayout.setFitsSystemWindows(false);
                     contentView.setBackgroundColor(calculateStatusColor(color, statusBarAlpha));
                 }
@@ -78,13 +84,81 @@ public class StatusBarUtil {
      * 为 fragment 头部是 ImageView 的设置状态栏透明
      *
      * @param activity       fragment对应的activity
-     * @param stausBarAlpha  状态栏透明度
+     * @param statusBarAlpha  状态栏透明度
      * @param needOffsetView 需要向下偏移的 View
      */
     public static void setTranslucentForImageViewInFragment(Activity activity, int statusBarAlpha, View needOffsetView) {
-        setTranslucentForImageViewInFragment(activity, statusBarAlpha, needOffsetView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        setTranslucentForImageView(activity, statusBarAlpha, needOffsetView);
+        if (SDK_INT >= Build.VERSION_CODES.KITKAT && SDK_INT < LOLLIPOP) {
             clearPreviousSetting(activity);
+        }
+    }
+
+    /**
+     * 为头部是 ImageView 的界面设置状态透明
+     *
+     * @param activity       需要设置的activity
+     * @param statusBarAlpha 状态栏透明度
+     * @param needOffsetView 需要向下偏移的 view
+     */
+    private static void setTranslucentForImageView(Activity activity, int statusBarAlpha, View needOffsetView) {
+        if (SDK_INT > Build.VERSION_CODES.KITKAT) {
+            return;
+        }
+        setTransparentForWindow(activity);
+        addTranslucentView(activity, statusBarAlpha);
+    }
+
+    /**
+     * 添加半透明矩形条
+     *
+     * @param activity       需要设置的 activity
+     * @param statusBarAlpha 透明值
+     */
+    private static void addTranslucentView(Activity activity, int statusBarAlpha) {
+        ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
+        View fakeTranslucentView = contentView.findViewById(FAKE_TRANSLUCENT_VIEW_ID);
+        if (fakeTranslucentView != null) {
+            if (fakeTranslucentView.getVisibility() == View.GONE) {
+                fakeTranslucentView.setVisibility(View.VISIBLE);
+            }
+            fakeTranslucentView.setBackgroundColor(Color.argb(statusBarAlpha, 0, 0, 0));
+        } else {
+            contentView.addView(createTranslucentStatusBarView(activity, statusBarAlpha));
+        }
+    }
+
+    /**
+     * 创建半透明矩形 View
+     *
+     * @param activity       透明值
+     * @param statusBarAlpha 半透明 View
+     * @return
+     */
+    private static View createTranslucentStatusBarView(Activity activity, int statusBarAlpha) {
+        //绘制一个和状态一样高的矩形
+        View statusBarView = new View(activity);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
+        statusBarView.setLayoutParams(params);
+        statusBarView.setBackgroundColor(Color.argb(statusBarAlpha, 0, 0, 0));
+        statusBarView.setId(FAKE_TRANSLUCENT_VIEW_ID);
+        return statusBarView;
+    }
+
+    /**
+     * 设置透明
+     *
+     * @param activity
+     */
+    private static void setTransparentForWindow(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            activity.getWindow()
+                    .getDecorView()
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.getWindow()
+                    .setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 
