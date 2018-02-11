@@ -19,6 +19,9 @@ import dagger.Component;
 public interface ApplicationComponent {
     MyApp getApplication();
 
+    NewsApi getNetEaseApi();
+
+    JanDanApi getJanDanApi();
 
     Context getContext();
 }

@@ -1,6 +1,10 @@
 package com.will.weiyue.module;
 
+import com.google.gson.Gson;
 import com.will.weiyue.MyApp;
+import com.will.weiyue.net.ApiConstants;
+import com.will.weiyue.net.NewsApi;
+import com.will.weiyue.net.NewsApiService;
 import com.will.weiyue.net.RetrofitConfig;
 
 import java.io.File;
@@ -10,6 +14,9 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * author: liweixing
@@ -18,6 +25,7 @@ import okhttp3.OkHttpClient;
 
 @Module
 public class HttpModule {
+
     @Provides
     OkHttpClient.Builder provideOkHttpClient() {
         //指定缓存路径，缓存大小 100MB
@@ -30,5 +38,20 @@ public class HttpModule {
                 .addInterceptor(RetrofitConfig.sRewriteCacheControlInterceptor)
                 .addNetworkInterceptor(RetrofitConfig.sRewriteCacheControlInterceptor)
                 .connectTimeout(10, TimeUnit.SECONDS);
+    }
+
+    @Provides
+    NewsApi provideNetEaseApis(OkHttpClient.Builder builder) {
+        builder.addInterceptor(RetrofitConfig.sQueryParameterInterceptor);
+
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(builder.build());
+
+        return NewsApi.getInstance(retrofitBuilder
+                .baseUrl(ApiConstants.sIFengApi)
+                .build()
+                .create(NewsApiService.class));
     }
 }

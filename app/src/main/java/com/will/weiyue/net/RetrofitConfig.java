@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.will.weiyue.MyApp;
+import com.will.weiyue.bean.Constants;
 import com.will.weiyue.utils.NetUtil;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import okhttp3.CacheControl;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -91,4 +93,28 @@ public class RetrofitConfig {
         }
         return "null";
     }
+
+    /*
+    * 公共参数
+    * */
+    public static Interceptor sQueryParameterInterceptor = new Interceptor() {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request originalRequest = chain.request();
+            Request request;
+            HttpUrl modifiedUrl = originalRequest.url().newBuilder()
+                    .addQueryParameter("uid", Constants.uid)
+                    .addQueryParameter("devid", Constants.uid)
+                    .addQueryParameter("proid", "ifengnews")
+                    .addQueryParameter("vt", "5")
+                    .addQueryParameter("publishid", "6103")
+                    .addQueryParameter("screen", "1080x1920")
+                    .addQueryParameter("df", "androidphone")
+                    .addQueryParameter("os", "android_22")
+                    .addQueryParameter("nw", "wifi")
+                    .build();
+            request = originalRequest.newBuilder().url(modifiedUrl).build();
+            return chain.proceed(request);
+        }
+    };
 }

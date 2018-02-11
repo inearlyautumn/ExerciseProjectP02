@@ -21,7 +21,7 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackManager;
 public class MyApp extends LitePalApplication {
     private ApplicationComponent mApplicationComponent;
 
-    public static MyApp sMyApp;
+    private static MyApp sMyApp;
 
     public static int width = 0;
     public static int height = 0;
@@ -44,7 +44,7 @@ public class MyApp extends LitePalApplication {
         return sMyApp;
     }
 
-    public ApplicationComponent getmApplicationComponent() {
+    public ApplicationComponent getApplicationComponent() {
         return mApplicationComponent;
     }
 }
