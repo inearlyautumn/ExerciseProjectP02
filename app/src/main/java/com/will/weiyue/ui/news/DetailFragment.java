@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.will.weiyue.MyApp;
 import com.will.weiyue.R;
 import com.will.weiyue.bean.NewsDetail;
 import com.will.weiyue.component.ApplicationComponent;
@@ -21,7 +23,9 @@ import com.will.weiyue.ui.adapter.NewsDetailAdapter;
 import com.will.weiyue.ui.base.BaseFragment;
 import com.will.weiyue.ui.news.contract.DetailContract;
 import com.will.weiyue.ui.news.presenter.DetailPresenter;
+import com.will.weiyue.utils.ContextUtils;
 import com.will.weiyue.widget.CustomLoadMoreView;
+import com.will.weiyue.widget.NewsDelPop;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -51,10 +55,13 @@ public class DetailFragment extends BaseFragment<DetailPresenter> implements Det
     TextView tvToast;
     @BindView(R.id.rl_top_toast)
     RelativeLayout rlTopToast;
+
     Unbinder unbinder;
+    private View view_Focus;//项部banner
     private boolean isRemoveHeaderView;
     private String newsid;
     private int downpullNum;
+    private NewsDelPop newsDelPop;
     private List<NewsDetail.ItemBean> beanList;
     private List<NewsDetail.ItemBean> mBannerList;
     private NewsDetailAdapter detailAdapter;
@@ -119,22 +126,35 @@ public class DetailFragment extends BaseFragment<DetailPresenter> implements Det
                 toRead(itemBean);
             }
         });
-    }
 
-    private void toRead(NewsDetail.ItemBean itemBean) {
-        if (itemBean == null) {
-            return;
-        }
-        switch (itemBean.getItemType()) {
-            case NewsDetail.ItemBean.TYPE_DOC_TITLEIMG:
-            case NewsDetail.ItemBean.TYPE_DOC_SLIDEIMG:
-                /*Intent intent = new Intent(getActivity(), ArticleReadActivity.class);
-                intent.putExtra("aid", itemBean.getDocumentId());
-                startActivity(intent);*/
-                break;
-            case NewsDetail.ItemBean.TYPE_SLIDE:
-                ImageBrowseActivity.launch
-        }
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                NewsDetail.ItemBean itemBean = (NewsDetail.ItemBean) baseQuickAdapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.iv_close:
+                        view.getHeight();
+                        int[] location = new int[2];
+                        view.getLocationInWindow(location);
+                        if (itemBean.getStyle() == null) {
+                            return;
+                        }
+                        if (ContextUtils.getScreenWidth(MyApp.getContext()) - 50 - location[1] < ContextUtils.dip2px(MyApp.getContext(), 80)) {
+                            newsDelPop.anchorView(view)
+                                    .gravity(Gravity.TOP)
+                                    .setBackReason(itemBean.getStyle().getBackreason(), true, position)
+                                    .show();
+                        } else {
+                            newsDelPop.anchorView(view)
+                                    .gravity(Gravity.BOTTOM)
+                                    .setBackReason(itemBean.getStyle().getBackreason(), false, position)
+                                    .show();
+                        }
+                        break;
+                }
+            }
+        });
+        view_Focus = getView().inflate(getActivity(), R.layout.news_detail_headerview, null);
     }
 
     @Override
@@ -174,5 +194,23 @@ public class DetailFragment extends BaseFragment<DetailPresenter> implements Det
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void toRead(NewsDetail.ItemBean itemBean) {
+        if (itemBean == null) {
+            return;
+        }
+        switch (itemBean.getItemType()) {
+            case NewsDetail.ItemBean.TYPE_DOC_TITLEIMG:
+            case NewsDetail.ItemBean.TYPE_DOC_SLIDEIMG:
+                /*Intent intent = new Intent(getActivity(), ArticleReadActivity.class);
+                intent.putExtra("aid", itemBean.getDocumentId());
+                startActivity(intent);*/
+                break;
+            case NewsDetail.ItemBean.TYPE_SLIDE:
+                ImageBrowseActivity.launch(getActivity(), itemBean);
+                break;
+
+        }
     }
 }

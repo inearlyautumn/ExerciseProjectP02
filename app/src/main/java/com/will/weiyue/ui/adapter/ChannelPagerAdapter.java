@@ -30,11 +30,21 @@ public class ChannelPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return DetailFragment.new;
+        return DetailFragment.newInstance(mChannels.get(position).getChannelId(), position);
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mChannels.get(position).getChannelName();
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return mChannels != null ? mChannels.size() : 0;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 }

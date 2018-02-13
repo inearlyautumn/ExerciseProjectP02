@@ -2,30 +2,22 @@ package com.will.weiyue.ui.news;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-
 import com.flyco.tablayout.SlidingTabLayout;
 import com.will.weiyue.R;
 import com.will.weiyue.bean.Channel;
 import com.will.weiyue.component.ApplicationComponent;
 import com.will.weiyue.component.DaggerHttpComponent;
-import com.will.weiyue.component.HttpComponent;
 import com.will.weiyue.ui.adapter.ChannelPagerAdapter;
 import com.will.weiyue.ui.base.BaseFragment;
 import com.will.weiyue.ui.news.contract.NewsContract;
 import com.will.weiyue.ui.news.presenter.NewsPresenter;
 import com.will.weiyue.widget.CustomViewPager;
-
 import org.simple.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**

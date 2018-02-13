@@ -18,6 +18,8 @@ import com.bumptech.glide.request.target.Target;
 public class SwipeBackLayout extends ViewGroup {
     public static final String TAG = SwipeBackLayout.class.getSimpleName();
     private View target;
+    private  ViewDragHelper viewDragHelper;
+
     /**
      * Whether allow to pull this layout.
      */
@@ -64,8 +66,6 @@ public class SwipeBackLayout extends ViewGroup {
     }
 
     private static final double AUTO_FINISHED_SPEED_LIMIT = 2000.0;
-
-    private final ViewDragHelper viewDragHelper;
 
 
     public SwipeBackLayout(Context context) {
@@ -315,5 +315,9 @@ public class SwipeBackLayout extends ViewGroup {
          * @param fractionScreen relative to the screen.
          */
         void onViewpositionChanged(float fractionAnchor, float fractionScreen);
+    }
+
+    public void setOnSwipeBackListener(SwipeBackListener listener) {
+        swipeBackListener = listener;
     }
 }
