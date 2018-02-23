@@ -17,8 +17,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * author: liweixing
  * date: 2018/2/5
  */
-
-class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
+public class SupportActivity extends RxAppCompatActivity implements ISupportActivity{
     final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
 
     @Override
@@ -27,9 +26,8 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
     }
 
     /**
-     * Perform some extra transactions
-     *
-     * @return
+     * Perform some extra transactions.
+     * 额外的事务：自定义Tag，添加SharedElement动画，操作非回退栈Fragment
      */
     @Override
     public ExtraTransaction extraTransaction() {
@@ -39,7 +37,6 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ？？？
         mDelegate.onCreate(savedInstanceState);
     }
 
@@ -56,24 +53,28 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
     }
 
     /**
-     * Note: return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
-     *
-     * @param ev
-     * @return
+     * Note： return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-//        return super.dispatchTouchEvent(ev);
         return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
     }
 
     /**
-     * 不建议复写该方法，请使用{@link #onBackPressedSupport()} 代替
+     * 不建议复写该方法,请使用 {@link #onBackPressedSupport} 代替
      */
     @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
+    final public void onBackPressed() {
         mDelegate.onBackPressed();
+    }
+
+    /**
+     * 该方法回调时机为,Activity回退栈内Fragment的数量 小于等于1 时,默认finish Activity
+     * 请尽量复写该方法,避免复写onBackPress(),以保证SupportFragment内的onBackPressedSupport()回退事件正常执行
+     */
+    @Override
+    public void onBackPressedSupport() {
+        mDelegate.onBackPressedSupport();
     }
 
     /**
@@ -87,10 +88,8 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
     }
 
     /**
-     * set all fragments animation
+     * Set all fragments animation.
      * 设置Fragment内的全局动画
-     *
-     * @param fragmentAnimator
      */
     @Override
     public void setFragmentAnimator(FragmentAnimator fragmentAnimator) {
@@ -98,35 +97,25 @@ class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
     }
 
     /**
-     * set all fragment animation
-     * 构建Fragment 转场动画
-     * 如果是在Activity内实现，则构建的是Activity内所有的Fragment的转场动画，
-     * 如果是在Fragment内实现，则构建的是该Fragment的转场动画，此时优先级 >Activity的onCreateFragmentAnimator()
+     * Set all fragments animation.
+     * 构建Fragment转场动画
+     * <p/>
+     * 如果是在Activity内实现,则构建的是Activity内所有Fragment的转场动画,
+     * 如果是在Fragment内实现,则构建的是该Fragment的转场动画,此时优先级 > Activity的onCreateFragmentAnimator()
      *
      * @return FragmentAnimator对象
      */
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
-        return null;
+        return mDelegate.onCreateFragmentAnimator();
     }
 
-    /**
-     * 该方法回调时机为,Activity回退堆内Fragment的数量，小于等于1时，默认finish Activity
-     * 请尽量复写该方法，避免复写 onBackPress(),以保证SupportFragment 内的onBackPressedSupport()回退事件正常执行
-     */
-    @Override
-    public void onBackPressedSupport() {
-        mDelegate.onBackPressedSupport();
-    }
 
     /**
-     * 获取栈内的Fragment对象
-     *
-     * @param fragmentClass
-     * @param <T>
-     * @return
+     * 获取栈内的fragment对象
      */
     public <T extends ISupportFragment> T findFragment(Class<T> fragmentClass) {
         return SupportHelper.findFragment(getSupportFragmentManager(), fragmentClass);
+
     }
 }
