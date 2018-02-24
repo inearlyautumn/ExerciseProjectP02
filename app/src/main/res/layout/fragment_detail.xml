@@ -8,7 +8,8 @@
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/mPtrFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
 
         <com.will.weiyue.ui.widget.SimpleMultiStateView
             android:id="@+id/simpleMultiStateView"
@@ -18,7 +19,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:scrollbars="vertical"/>
 
         </com.will.weiyue.ui.widget.SimpleMultiStateView>
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
@@ -34,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="已为您推荐了%o1$s条新资讯"
+            android:text="@string/news_toast"
             android:textColor="#3393D5"
             android:textSize="12sp"/>
     </RelativeLayout>

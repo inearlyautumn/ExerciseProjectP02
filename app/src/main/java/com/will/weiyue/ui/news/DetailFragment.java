@@ -1,5 +1,6 @@
 package com.will.weiyue.ui.news;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,24 +9,35 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.flyco.animation.SlideEnter.SlideRightEnter;
+import com.flyco.animation.SlideExit.SlideRightExit;
+import com.github.florent37.viewanimator.AnimationListener;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.will.weiyue.MyApp;
 import com.will.weiyue.R;
 import com.will.weiyue.bean.NewsDetail;
 import com.will.weiyue.component.ApplicationComponent;
 import com.will.weiyue.component.DaggerHttpComponent;
 import com.will.weiyue.net.NewsApi;
+import com.will.weiyue.net.NewsUtils;
 import com.will.weiyue.ui.adapter.NewsDetailAdapter;
 import com.will.weiyue.ui.base.BaseFragment;
 import com.will.weiyue.ui.news.contract.DetailContract;
 import com.will.weiyue.ui.news.presenter.DetailPresenter;
 import com.will.weiyue.utils.ContextUtils;
+import com.will.weiyue.utils.ImageLoaderUtil;
 import com.will.weiyue.widget.CustomLoadMoreView;
 import com.will.weiyue.widget.NewsDelPop;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -66,6 +78,7 @@ public class DetailFragment extends BaseFragment<DetailPresenter> implements Det
     private List<NewsDetail.ItemBean> mBannerList;
     private NewsDetailAdapter detailAdapter;
     private int upPullNum = 1;
+    private Banner mBanner;
 
     public static DetailFragment newInstance(String newsid, int position) {
         Bundle args = new Bundle();
@@ -154,7 +167,88 @@ public class DetailFragment extends BaseFragment<DetailPresenter> implements Det
                 }
             }
         });
+
         view_Focus = getView().inflate(getActivity(), R.layout.news_detail_headerview, null);
+        mBanner = (Banner) view_Focus.findViewById(R.id.banner);
+        //设置banner样式
+        mBanner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE)
+                .setImageLoader(new ImageLoader() {
+                    @Override
+                    public void displayImage(Context context, Object path, ImageView imageView) {
+                        //Glide 加载图片简单用法
+                        ImageLoaderUtil.loadImage(getActivity(), path, imageView);
+                    }
+                })
+                .setDelayTime(3000)
+                .setIndicatorGravity(BannerConfig.RIGHT);
+        mBanner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                if (mBannerList.size() < 1) {
+                    return;
+                }
+                bannerToRead(mBannerList.get(position));
+            }
+        });
+        newsDelPop = new NewsDelPop(getActivity())
+                .alignCenter(false)
+                .widthScale(0.95f)
+                .showAnim(new SlideRightEnter())
+                .dismissAnim(new SlideRightExit())
+                .offset(-100, 0)
+                .dimEnabled(true);
+        newsDelPop.setClickListener(new NewsDelPop.onClickListener() {
+            @Override
+            public void onClick(int position) {
+                newsDelPop.dismiss();
+                detailAdapter.remove(position);
+                showToast(0, false);
+            }
+        });
+    }
+
+    private void showToast(int num, boolean isRefresh) {
+        if (isRefresh) {
+            tvToast.setText(String.format(String.format(getResources().getString(R.string.news_toast), num + "")));
+        } else {
+            tvToast.setText("将为你减少此类内容");
+        }
+        rlTopToast.setVisibility(View.VISIBLE);
+        ViewAnimator.animate(rlTopToast)
+                .newsPaper()
+                .duration(1000)
+                .start()
+                .onStop(new AnimationListener.Stop() {
+                    @Override
+                    public void onStop() {
+                        ViewAnimator.animate(rlTopToast)
+                                .bounceOut()
+                                .duration(1000)
+                                .start();
+                    }
+                });
+    }
+
+    private void bannerToRead(NewsDetail.ItemBean itemBean) {
+        if (itemBean == null) {
+            return;
+        }
+        switch (itemBean.getType()) {
+            case NewsUtils.TYPE_DOC:
+//                Intent intent = new Intent(getActivity(), ArticleReadActivity.class);
+//                intent.putExtra("aid", itemBean.getDocumentId());
+//                startActivity(intent);
+                break;
+            case NewsUtils.TYPE_SLIDE:
+                ImageBrowseActivity.launch(getActivity(), itemBean);
+                break;
+            case NewsUtils.TYPE_ADVERT:
+//                AdverActivity.launch()
+                break;
+            case NewsUtils.TYPE_PHVIDEO:
+                T("TYPE_PHVIDEO");
+                break;
+        }
     }
 
     @Override

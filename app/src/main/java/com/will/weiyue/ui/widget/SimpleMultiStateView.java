@@ -3,22 +3,20 @@ package com.will.weiyue.ui.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import com.will.weiyue.R;
 
-/**
- * author: liweixing
- * date: 2018/2/6
- */
 
+/**
+ * 状态视图
+ */
 public class SimpleMultiStateView extends MultiStateView {
+
     private static final String TAG = SimpleMultiStateView.class.getSimpleName();
 
-    private static final int MIN_SHOW_TIME = 400;//ms
-    private static final int MIN_DELAY = 600;//ms
+    private static final int MIN_SHOW_TIME = 400; // ms
+    private static final int MIN_DELAY = 600; // ms
 
     private int mTargetState = -1;
     private long mLoadingStartTime = -1;
@@ -37,22 +35,23 @@ public class SimpleMultiStateView extends MultiStateView {
     int resIdFail;
     int resIdNonet;
 
-    public SimpleMultiStateView(@NonNull Context context) {
+
+    public SimpleMultiStateView(Context context) {
         this(context, null);
     }
 
-    public SimpleMultiStateView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public SimpleMultiStateView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SimpleMultiStateView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SimpleMultiStateView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.msv_simpleMultiStateView);
-        resIdEmpty = typedArray.getResourceId(R.styleable.msv_simpleMultiStateView_msv_emptyView, -1);
-        resIdLoading = typedArray.getResourceId(R.styleable.msv_simpleMultiStateView_msv_loadingView, -1);
-        resIdFail = typedArray.getResourceId(R.styleable.msv_simpleMultiStateView_msv_failView, -1);
-        resIdNonet = typedArray.getResourceId(R.styleable.msv_simpleMultiStateView_msv_nonetView, -1);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.msv_SimpleMultiStateView);
+        resIdEmpty = typedArray.getResourceId(R.styleable.msv_SimpleMultiStateView_msv_emptyView, -1);
+        resIdLoading = typedArray.getResourceId(R.styleable.msv_SimpleMultiStateView_msv_loadingView, -1);
+        resIdFail = typedArray.getResourceId(R.styleable.msv_SimpleMultiStateView_msv_failView, -1);
+        resIdNonet = typedArray.getResourceId(R.styleable.msv_SimpleMultiStateView_msv_nonetView, -1);
         typedArray.recycle();
         if (typedArray != null) {
             if (resIdEmpty != -1) {
@@ -68,16 +67,17 @@ public class SimpleMultiStateView extends MultiStateView {
                 addViewForStatus(MultiStateView.STATE_NONET, resIdNonet);
             }
         }
+
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         removeCallbacks(mLoadingHide);
     }
 
     @Override
-    protected void onDetachedFromWindow() {
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         removeCallbacks(mLoadingHide);
     }
@@ -101,6 +101,7 @@ public class SimpleMultiStateView extends MultiStateView {
                 }
             }, 100);
         }
+
     }
 
     /**
@@ -115,6 +116,7 @@ public class SimpleMultiStateView extends MultiStateView {
                 }
             }, 100);
         }
+
     }
 
     /**
@@ -128,13 +130,16 @@ public class SimpleMultiStateView extends MultiStateView {
                     setViewState(MultiStateView.STATE_NONET);
                 }
             }, 100);
+
         }
+
     }
 
     /**
      * 显示内容
      */
     public void showContent() {
+
         this.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -164,8 +169,7 @@ public class SimpleMultiStateView extends MultiStateView {
     /**
      * 设置emptyView的自定义Layout
      *
-     * @param emptyResource emptyView的LayoutResource
-     * @return
+     * @param emptyResource emptyView的layoutResource
      */
     public SimpleMultiStateView setEmptyResource(@LayoutRes int emptyResource) {
         this.resIdEmpty = emptyResource;
@@ -176,8 +180,7 @@ public class SimpleMultiStateView extends MultiStateView {
     /**
      * 设置retryView的自定义Layout
      *
-     * @param retryResource retryView的LayoutResource
-     * @return
+     * @param retryResource retryView的layoutResource
      */
     public SimpleMultiStateView setRetryResource(@LayoutRes int retryResource) {
         this.resIdFail = retryResource;
@@ -186,10 +189,9 @@ public class SimpleMultiStateView extends MultiStateView {
     }
 
     /**
-     * 设置LoadingView的自定义Layout
+     * 设置loadingView的自定义Layout
      *
-     * @param loading LoadingView的layoutResource
-     * @return
+     * @param loadingResource loadingView的layoutResource
      */
     public SimpleMultiStateView setLoadingResource(@LayoutRes int loadingResource) {
         resIdLoading = loadingResource;
@@ -200,8 +202,7 @@ public class SimpleMultiStateView extends MultiStateView {
     /**
      * 设置NoNetView的自定义Layout
      *
-     * @param noNetResource
-     * @return
+     * @param noNetResource loadingView的layoutResource
      */
     public SimpleMultiStateView setNoNetResource(@LayoutRes int noNetResource) {
         resIdNonet = noNetResource;
@@ -213,4 +214,5 @@ public class SimpleMultiStateView extends MultiStateView {
         showLoadingView();
         return this;
     }
+
 }

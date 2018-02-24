@@ -1,5 +1,6 @@
 package com.will.weiyue.ui.base;
 
+
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,11 +14,10 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.will.weiyue.MyApp;
 import com.will.weiyue.R;
 import com.will.weiyue.ui.inter.IBase;
-import com.will.weiyue.ui.widget.MultiStateView;
-import com.will.weiyue.ui.widget.SimpleMultiStateView;
 import com.will.weiyue.utils.DialogHelper;
 import com.will.weiyue.utils.ToastUtil;
-
+import com.will.weiyue.ui.widget.MultiStateView;
+import com.will.weiyue.ui.widget.SimpleMultiStateView;
 
 import javax.inject.Inject;
 
@@ -132,7 +132,7 @@ public abstract class BaseFragment<T1 extends BaseContract.BasePresenter> extend
                 .setLoadingResource(R.layout.view_loading)
                 .setNoNetResource(R.layout.view_nonet)
                 .build()
-                .setOnReLoadListener(new MultiStateView.OnReLoadListener() {
+                .setonReLoadlistener(new MultiStateView.onReLoadlistener() {
                     @Override
                     public void onReload() {
                         onRetry();

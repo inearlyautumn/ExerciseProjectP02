@@ -72,7 +72,7 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
                     .setLoadingResource(R.layout.view_loading)
                     .setNoNetResource(R.layout.view_nonet)
                     .build()
-                    .setOnReLoadListener(new MultiStateView.OnReLoadListener() {
+                    .setonReLoadlistener(new MultiStateView.onReLoadlistener() {
                         @Override
                         public void onReload() {
                             onRetry();
