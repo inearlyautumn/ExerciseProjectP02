@@ -1,6 +1,9 @@
 package com.will.weiyue.net;
 
 import com.will.weiyue.bean.NewsArticleBean;
+import com.will.weiyue.bean.NewsDetail;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -20,4 +23,9 @@ public interface NewsApiService {
     @GET
     Observable<NewsArticleBean> getNewsArticleWidthCmpp(@Url String url,
                                                         @Query("aid") String aid);
+
+    @GET("ClientNews")
+    Observable<List<NewsDetail>> getNewsDetail(@Query("id") String id,
+                                               @Query("action") String action,
+                                               @Query("pullNum") int pullNum);
 }

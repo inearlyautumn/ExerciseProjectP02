@@ -23,8 +23,7 @@ public class NewsApi {
     public static final String ACTION_UP = "up";
 
     public Observable<List<NewsDetail>> getNewsDetail(String id, String action, int pullNum) {
-//        return mService.getNewsDetail
-        return null;
+        return mService.getNewsDetail(id, action, pullNum);
     }
 
     /**
